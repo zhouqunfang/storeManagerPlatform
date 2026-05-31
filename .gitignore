@@ -1,0 +1,16 @@
+# Maven
+springboot/target/
+
+# Node
+vue/node_modules/
+vue/dist/
+
+# IDE
+.idea/
+*.iml
+
+# OS
+.DS_Store
+
+# Logs
+*.log

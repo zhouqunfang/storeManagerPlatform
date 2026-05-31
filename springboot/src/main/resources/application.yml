@@ -1,0 +1,27 @@
+# ==================== 服务器配置 ====================
+server:
+  port: 9090  # 服务端口号
+
+# ==================== Spring 框架配置 ====================
+spring:
+  # ---------- 数据库配置 ----------
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver  # MySQL 驱动
+    username: root                                # 数据库用户名
+    password: 123456                              # 数据库密码
+    url: jdbc:mysql://localhost:3306/code2026?useUnicode=true&characterEncoding=utf-8&allowMultiQueries=true&useSSL=false&serverTimezone=GMT%2b8&allowPublicKeyRetrieval=true  # 数据库连接地址
+  # ---------- 文件上传配置 ----------
+  servlet:
+    multipart:
+      max-file-size: 100MB       # 单个文件最大上传大小
+      max-request-size: 100MB    # 单次请求最大上传大小
+
+# ==================== MyBatis 配置 ====================
+mybatis:
+  mapper-locations: classpath:mapper/*.xml  # Mapper XML 文件路径
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl  # SQL 日志输出到控制台
+    map-underscore-to-camel-case: true                      # 下划线转驼峰命名（如 user_name → userName）
+
+# ==================== 自定义配置 ====================
+fileBaseUrl: http://localhost  # 文件访问基础地址
