@@ -19,21 +19,17 @@ export default defineConfig({
     vue(),
     // 自动导入常用 API 和 Element Plus 相关方法
     AutoImport({
-      resolvers: [ElementPlusResolver(
-          { importStyle: 'sass' }
-      )],
+      resolvers: [ElementPlusResolver({ importStyle: 'sass' })]
     }),
     // 自动注册组件，减少重复导入代码
     Components({
-      resolvers: [ElementPlusResolver(
-          { importStyle: 'sass' }
-      )],
+      resolvers: [ElementPlusResolver({ importStyle: 'sass' })]
     }),
 
     // 使用源码样式，便于通过 Sass 覆盖 Element Plus 默认主题
     ElementPlus({
-      useSource: true,
-    }),
+      useSource: true
+    })
   ],
   resolve: {
     alias: {
@@ -47,7 +43,7 @@ export default defineConfig({
         // 所有 scss 文件默认注入全局样式和变量
         additionalData: `
           @use "@/assets/css/index.scss" as *;
-        `,
+        `
       }
     }
   }

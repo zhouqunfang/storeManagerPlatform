@@ -1,7 +1,12 @@
 <template>
   <div>
     <div class="card" style="margin-bottom: 5px">
-      <el-input style="width: 300px" v-model="data.name" placeholder="请输入名称查询" :prefix-icon="Search" />
+      <el-input
+        style="width: 300px"
+        v-model="data.name"
+        placeholder="请输入名称查询"
+        :prefix-icon="Search"
+      />
       <el-button @click="load" type="primary" style="margin-left: 10px">查询</el-button>
       <el-button @click="reset" type="info">重置</el-button>
     </div>
@@ -16,13 +21,18 @@
           <el-table-column prop="name" label="姓名" />
           <el-table-column prop="avatar" label="头像">
             <template #default="scope">
-              <el-image v-if="scope.row.avatar" style="width: 50px; height: 50px; display: block; border-radius: 50%"
-                        :src="scope.row.avatar" :preview-src-list="[scope.row.avatar]" preview-teleported></el-image>
+              <el-image
+                v-if="scope.row.avatar"
+                style="width: 50px; height: 50px; display: block; border-radius: 50%"
+                :src="scope.row.avatar"
+                :preview-src-list="[scope.row.avatar]"
+                preview-teleported
+              ></el-image>
             </template>
           </el-table-column>
           <el-table-column prop="role" label="角色" />
           <el-table-column prop="account" label="账户余额" />
-          <el-table-column label="操作" width="180" fixed="right" >
+          <el-table-column label="操作" width="180" fixed="right">
             <template #default="scope">
               <el-button type="primary" @click="handleEdit(scope.row)">编辑</el-button>
               <el-button type="danger" @click="del(scope.row.id)">删除</el-button>
@@ -33,23 +43,40 @@
     </div>
 
     <div class="card">
-      <el-pagination v-model:current-page="data.pageNum" v-model:page-size="data.pageSize"
-                     @current-change="load" background layout="total, prev, pager, next" :total="data.total" />
+      <el-pagination
+        v-model:current-page="data.pageNum"
+        v-model:page-size="data.pageSize"
+        @current-change="load"
+        background
+        layout="total, prev, pager, next"
+        :total="data.total"
+      />
     </div>
 
     <el-dialog title="用户信息" v-model="data.formVisible" width="30%" destroy-on-close>
-      <el-form ref="formRef" :model="data.form" :rules="data.rules" label-width="80px" style="padding-right: 30px">
+      <el-form
+        ref="formRef"
+        :model="data.form"
+        :rules="data.rules"
+        label-width="80px"
+        style="padding-right: 30px"
+      >
         <el-form-item prop="username" label="账号">
-          <el-input :disabled="data.form.id !== undefined" v-model="data.form.username" placeholder="请输入账号" autocomplete="off"></el-input>
+          <el-input
+            :disabled="data.form.id !== undefined"
+            v-model="data.form.username"
+            placeholder="请输入账号"
+            autocomplete="off"
+          ></el-input>
         </el-form-item>
         <el-form-item prop="name" label="姓名">
           <el-input v-model="data.form.name" placeholder="请输入姓名" autocomplete="off"></el-input>
         </el-form-item>
         <el-form-item prop="avatar" label="头像">
           <el-upload
-              :action="baseUrl + '/files/upload'"
-              list-type="picture"
-              :on-success="handleFileUpload"
+            :action="baseUrl + '/files/upload'"
+            list-type="picture"
+            :on-success="handleFileUpload"
           >
             <el-button type="primary">点击上传</el-button>
           </el-upload>
@@ -62,15 +89,14 @@
         </span>
       </template>
     </el-dialog>
-
   </div>
 </template>
 
 <script setup>
-import { reactive, ref } from "vue";
-import { Search } from "@element-plus/icons-vue";
-import request from "@/utils/request";
-import {ElMessage, ElMessageBox} from "element-plus";
+import { reactive, ref } from 'vue'
+import { Search } from '@element-plus/icons-vue'
+import request from '@/utils/request'
+import { ElMessage, ElMessageBox } from 'element-plus'
 
 const baseUrl = import.meta.env.VITE_BASE_URL
 const formRef = ref()
@@ -83,28 +109,28 @@ const data = reactive({
   formVisible: false,
   form: {},
   rules: {
-    username: [
-      { required: true, message: '请输入账号', trigger: 'blur' },
-    ]
+    username: [{ required: true, message: '请输入账号', trigger: 'blur' }]
   }
 })
 
 // 分页查询数据的函数
 const load = () => {
-  request.get('/user/selectPage', {
-    params: {
-      pageNum: data.pageNum,
-      pageSize: data.pageSize,
-      name: data.name
-    }
-  }).then(res => {
-    if (res.code === '200') {
-      data.tableData = res.data?.list
-      data.total = res.data?.total
-    } else {
-      ElMessage.error(res.msg)
-    }
-  })
+  request
+    .get('/user/selectPage', {
+      params: {
+        pageNum: data.pageNum,
+        pageSize: data.pageSize,
+        name: data.name
+      }
+    })
+    .then((res) => {
+      if (res.code === '200') {
+        data.tableData = res.data?.list
+        data.total = res.data?.total
+      } else {
+        ElMessage.error(res.msg)
+      }
+    })
 }
 load()
 
@@ -114,16 +140,18 @@ const reset = () => {
 }
 
 const del = (id) => {
-  ElMessageBox.confirm('您确定删除吗？', '删除确认', { type: 'warning' }).then(res => {
-    request.delete('/user/delete/' + id).then(res => {
-      if (res.code === '200') {
-        ElMessage.success('操作成功')
-        load()
-      } else {
-        ElMessage.error(res.msg)
-      }
+  ElMessageBox.confirm('您确定删除吗？', '删除确认', { type: 'warning' })
+    .then((res) => {
+      request.delete('/user/delete/' + id).then((res) => {
+        if (res.code === '200') {
+          ElMessage.success('操作成功')
+          load()
+        } else {
+          ElMessage.error(res.msg)
+        }
+      })
     })
-  }).catch(err => {})
+    .catch((err) => {})
 }
 
 const handleAdd = () => {
@@ -137,7 +165,7 @@ const handleEdit = (row) => {
 }
 
 const add = () => {
-  request.post('/user/add', data.form).then(res => {
+  request.post('/user/add', data.form).then((res) => {
     if (res.code === '200') {
       ElMessage.success('操作成功')
       data.formVisible = false
@@ -149,7 +177,7 @@ const add = () => {
 }
 
 const update = () => {
-  request.put('/user/update', data.form).then(res => {
+  request.put('/user/update', data.form).then((res) => {
     if (res.code === '200') {
       ElMessage.success('操作成功')
       data.formVisible = false
@@ -162,7 +190,8 @@ const update = () => {
 
 const save = () => {
   formRef.value.validate((valid) => {
-    if (valid) {  // 表示表单校验通过
+    if (valid) {
+      // 表示表单校验通过
       data.form.id ? update() : add()
     }
   })

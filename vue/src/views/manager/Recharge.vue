@@ -1,9 +1,19 @@
 <template>
   <div>
-
-    <div class="card" style="margin-bottom: 5px;">
-      <el-input v-model="data.userName" style="width: 300px; margin-right: 10px" placeholder="请输入用户名称查询"></el-input>
-      <el-date-picker style="width: 300px; margin-right: 10px" v-model="data.time" type="date" placeholder="请输入日期查询" format="YYYY-MM-DD" value-format="YYYY-MM-DD" />
+    <div class="card" style="margin-bottom: 5px">
+      <el-input
+        v-model="data.userName"
+        style="width: 300px; margin-right: 10px"
+        placeholder="请输入用户名称查询"
+      ></el-input>
+      <el-date-picker
+        style="width: 300px; margin-right: 10px"
+        v-model="data.time"
+        type="date"
+        placeholder="请输入日期查询"
+        format="YYYY-MM-DD"
+        value-format="YYYY-MM-DD"
+      />
       <el-button type="primary" @click="load">查询</el-button>
       <el-button type="info" style="margin: 0 10px" @click="reset">重置</el-button>
     </div>
@@ -27,15 +37,22 @@
     </div>
 
     <div class="card">
-      <el-pagination @current-change="load" background layout="total, prev, pager, next" v-model:page-size="data.pageSize" v-model:current-page="data.pageNum" :total="data.total"/>
+      <el-pagination
+        @current-change="load"
+        background
+        layout="total, prev, pager, next"
+        v-model:page-size="data.pageSize"
+        v-model:current-page="data.pageNum"
+        :total="data.total"
+      />
     </div>
   </div>
 </template>
 
 <script setup>
-import request from "@/utils/request";
-import {reactive, ref} from "vue";
-import {ElMessageBox, ElMessage} from "element-plus";
+import request from '@/utils/request'
+import { reactive, ref } from 'vue'
+import { ElMessageBox, ElMessage } from 'element-plus'
 
 const formRef = ref()
 const data = reactive({
@@ -46,22 +63,24 @@ const data = reactive({
   form: {},
   tableData: [],
   userName: null,
-  time: null,
+  time: null
 })
 
 // 分页查询
 const load = () => {
-  request.get('/recharge/selectPage', {
-    params: {
-      pageNum: data.pageNum,
-      pageSize: data.pageSize,
-      userName: data.userName,
-      time: data.time
-    }
-  }).then(res => {
-    data.tableData = res.data?.list
-    data.total = res.data?.total
-  })
+  request
+    .get('/recharge/selectPage', {
+      params: {
+        pageNum: data.pageNum,
+        pageSize: data.pageSize,
+        userName: data.userName,
+        time: data.time
+      }
+    })
+    .then((res) => {
+      data.tableData = res.data?.list
+      data.total = res.data?.total
+    })
 }
 load()
 
@@ -79,7 +98,7 @@ const handleEdit = (row) => {
 
 // 新增保存
 const add = () => {
-  request.post('/recharge/add', data.form).then(res => {
+  request.post('/recharge/add', data.form).then((res) => {
     if (res.code === '200') {
       load()
       ElMessage.success('操作成功')
@@ -92,7 +111,7 @@ const add = () => {
 
 // 编辑保存
 const update = () => {
-  request.put('/recharge/update', data.form).then(res => {
+  request.put('/recharge/update', data.form).then((res) => {
     if (res.code === '200') {
       load()
       ElMessage.success('操作成功')
@@ -105,7 +124,7 @@ const update = () => {
 
 // 弹窗保存
 const save = () => {
-  formRef.value.validate(valid => {
+  formRef.value.validate((valid) => {
     if (valid) {
       // data.form有id就是更新，没有就是新增
       data.form.id ? update() : add()
@@ -115,16 +134,18 @@ const save = () => {
 
 // 删除
 const handleDelete = (id) => {
-  ElMessageBox.confirm('删除后数据无法恢复，您确定删除吗?', '删除确认', { type: 'warning' }).then(res => {
-    request.delete('/recharge/delete/' + id).then(res => {
-      if (res.code === '200') {
-        load()
-        ElMessage.success('操作成功')
-      } else {
-        ElMessage.error(res.msg)
-      }
+  ElMessageBox.confirm('删除后数据无法恢复，您确定删除吗?', '删除确认', { type: 'warning' })
+    .then((res) => {
+      request.delete('/recharge/delete/' + id).then((res) => {
+        if (res.code === '200') {
+          load()
+          ElMessage.success('操作成功')
+        } else {
+          ElMessage.error(res.msg)
+        }
+      })
     })
-  }).catch(err => {})
+    .catch((err) => {})
 }
 
 // 重置

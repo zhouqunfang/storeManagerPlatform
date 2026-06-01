@@ -1,0 +1,6 @@
+node_modules
+dist
+.idea
+.vscode
+.trae
+package-lock.json
